@@ -4,35 +4,35 @@ import { Layout, Menu, theme } from 'antd';
 
 const { Sider } = Layout;
 const SideMenu: React.FC = () => {
-    const {
-        token: { colorBgContainer },
-    } = theme.useToken();
-    return (
-        <Sider
-            breakpoint="lg"
-            collapsedWidth="0"
-            onBreakpoint={(broken) => {
-                console.log(broken);
-            }}
-            onCollapse={(collapsed, type) => {
-                console.log(collapsed, type);
-            }}
-        >
-            <div className="logo" />
-            <Menu
-                theme="dark"
-                mode="inline"
-                defaultSelectedKeys={['4']}
-                items={[UserOutlined, VideoCameraOutlined, UploadOutlined, UserOutlined].map(
-                    (icon, index) => ({
-                        key: String(index + 1),
-                        icon: React.createElement(icon),
-                        label: `nav ${index + 1}`,
-                    }),
-                )}
-            />
-        </Sider>
-    );
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+  return (
+    <Sider
+      breakpoint="lg"
+      collapsedWidth="0"
+      onBreakpoint={(broken) => {
+        console.log(broken);
+      }}
+      onCollapse={(collapsed, type) => {
+        console.log(collapsed, type);
+      }}
+    >
+      <div className="logo" />
+      <Menu
+        theme="dark"
+        mode="inline"
+        defaultSelectedKeys={['4']}
+        items={[UserOutlined, VideoCameraOutlined, UploadOutlined, UserOutlined].map(
+          (icon, index) => ({
+            key: String(index + 1),
+            icon: React.createElement(icon),
+            label: `nav ${index + 1}`,
+          }),
+        )}
+      />
+    </Sider>
+  );
 };
 
 export default SideMenu;
