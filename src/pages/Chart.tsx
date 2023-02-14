@@ -3,24 +3,55 @@ import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
 import API from "../API";
 import { Employee } from "../employee";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+// import { dat } from "react-chartjs-2/dist/types";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Chart: React.FC = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const [chartData, setChartData] = useState({});
+  const [chartData, setChartData] = useState<any>();
 
   useEffect(() => {
     const fetchData = async () => {
       const getEmployees = await API.getEmployees();
       setEmployees(getEmployees);
 
-
-      const chartData = createChartData(getEmployees);
-      setChartData(chartData);
+      // const chartData = createChartData(getEmployees);
+      createChartData(getEmployees);
+      // setChartData(chartData);
     };
 
     fetchData();
-
   }, []);
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Chart.js Bar Chart',
+      },
+    },
+  };
 
   const createChartData = (employees: Employee[]) => {
     const years: { [key: string]: number } = {};
@@ -36,7 +67,7 @@ const Chart: React.FC = () => {
     const labels = Object.keys(years);
     const data = Object.values(years);
 
-    return {
+    setChartData({
       labels,
       datasets: [
         {
@@ -47,13 +78,13 @@ const Chart: React.FC = () => {
           borderWidth: 1
         }
       ]
-    };
+    });
   };
 
   return (
     <div>
       <h2>Employee Join Year Chart</h2>
-      <Bar data={chartData} />
+      <Bar data={chartData} options={options} />
     </div>
   );
 };
