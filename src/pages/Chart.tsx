@@ -25,7 +25,21 @@ ChartJS.register(
 
 const Chart: React.FC = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const [chartData, setChartData] = useState<any>();
+  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  const [chartData, setChartData] = useState<any>({
+    labels: labels,
+    datasets: [{
+      label: 'Expenses by Month',
+      data: [65, 59, 80, 81, 56, 55, 40],
+      backgroundColor: [
+        'rgb(153, 102, 255)'
+      ],
+      borderColor: [
+        'rgb(153, 102, 255)'
+      ],
+      borderWidth: 1
+    }]
+  });
 
   useEffect(() => {
     const fetchData = async () => {
