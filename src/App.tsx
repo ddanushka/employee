@@ -5,10 +5,11 @@ import Login from './pages/Login';
 import NoPermission from './pages/NoPermission';
 import Chart from './pages/Chart';
 import BaseLayout from './layout/Base';
+import { useContext } from 'react';
+import { AuthContext } from './context/AuthContext';
 
 function App() {
-  const isAuthenticated = false;
-  const role = 'admin'
+  const { isAuthenticated, role } = useContext(AuthContext);
 
   return (
     <div className="App">

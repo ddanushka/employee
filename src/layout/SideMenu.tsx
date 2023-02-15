@@ -1,5 +1,5 @@
 import React from 'react';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { LogoutOutlined, UserOutlined, BarChartOutlined } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 
 const { Sider } = Layout;
@@ -23,13 +23,20 @@ const SideMenu: React.FC = () => {
         theme="dark"
         mode="inline"
         defaultSelectedKeys={['4']}
-        items={[UserOutlined, VideoCameraOutlined, UploadOutlined, UserOutlined].map(
+        items={[UserOutlined, BarChartOutlined, LogoutOutlined].map(
           (icon, index) => ({
             key: String(index + 1),
             icon: React.createElement(icon),
             label: `nav ${index + 1}`,
           }),
         )}
+      />
+      <Menu
+        theme="dark"
+        mode="inline"
+        defaultSelectedKeys={['4']}
+        items={items}
+
       />
     </Sider>
   );

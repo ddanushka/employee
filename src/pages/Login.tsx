@@ -1,52 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from "react";
 import { Form, Input, Button, Layout, Typography, Space } from 'antd';
-
-const { Header, Content, Footer } = Layout;
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { AuthContext } from "../context/AuthContext";
+const { Content } = Layout;
 const { Title } = Typography;
 
-const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const Login: React.FC = () => {
+  const { login } = useContext(AuthContext);
+  const [formData, setFormData] = useState({
+    username: "",
+    password: ""
+  });
 
-  const handleSubmit = () => {
-    // handle form submission and authentication
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    login(formData);
+
+  };
+
+  const handleChange = (e: any) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
     <div className="login-page">
       <Layout>
-          <Space direction="horizontal" style={{ width: '100%', justifyContent: 'center' }}>
-        <Content>
+        <Space direction="horizontal" style={{ width: '100%', justifyContent: 'center' }}>
+          <Content>
             <Title>Login</Title>
-            <Form onFinish={handleSubmit}>
-              <Form.Item
-                label="Username"
-                name="username"
-                rules={[{ required: true, message: 'Please input your username!' }]}
-              >
-                <Input value={username} onChange={e => setUsername(e.target.value)} />
-              </Form.Item>
-
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[{ required: true, message: 'Please input your password!' }]}
-              >
-                <Input.Password
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
+            <Form onSubmitCapture={handleSubmit} className="login-form">
+              <Form.Item>
+                <Input
+                  prefix={<UserOutlined className="site-form-item-icon" />}
+                  placeholder="Username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
                 />
               </Form.Item>
-
               <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Submit
+                <Input
+                  prefix={<LockOutlined className="site-form-item-icon" />}
+                  type="password"
+                  placeholder="Password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+              </Form.Item>
+              <Form.Item>
+
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="login-form-button"
+                >
+                  Log in
                 </Button>
               </Form.Item>
             </Form>
 
-        </Content>
-          </Space>
+          </Content>
+        </Space>
       </Layout>
     </div>
   );
