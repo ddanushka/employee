@@ -18,6 +18,7 @@ const API = {
         localStorage.setItem("employees", JSON.stringify(employees));
     },
     deleteEmployee: (id: string) => {
+        console.log(id)
         const employees = API.getEmployees().filter((e: { id: any; }) => e.id !== id);
         localStorage.setItem("employees", JSON.stringify(employees));
     }
