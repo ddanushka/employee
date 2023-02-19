@@ -3,23 +3,32 @@ import { Employee } from "../employee";
 import API from "../API";
 import { Input, Modal, Form, Radio, FloatButton, List, Button } from "antd";
 import DatePicker from "./DatePicker";
+import AlertMessage from "./AlertMessage";
 import { PlusOutlined } from '@ant-design/icons';
 import moment from "moment";
 import uuid from "react-uuid";
 
+const { Item } = Form;
 const { TextArea } = Input;
 
 const EmployeeList: React.FC = () => {
+
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [visible, setVisible] = useState(false);
   const [formData, setFormData] = useState<Partial<Employee>>({});
   const [formType, setFormType] = useState<"add" | "edit">("add");
+  const [form] = Form.useForm();
+  const [showMessage, setShowMessage] = useState<String | null>();
 
   const [date, setDate] = useState<moment.Moment | null>(moment(new Date()))
+  // const handleDateChange = (dateObject: moment.Moment | null, dateString: string): void => {
+  //   console.info('date string:', dateString)
+  //   console.info('date obj:', dateObject)
+  //   setDate(dateObject)
+  // }
   const handleDateChange = (dateObject: moment.Moment | null, dateString: string): void => {
-    console.info('date string:', dateString)
-    console.info('date obj:', dateObject)
     setDate(dateObject)
+    setFormData({ ...formData, joinedDate: dateString });
   }
 
   const fetchData = async () => {
@@ -31,74 +40,167 @@ const EmployeeList: React.FC = () => {
   }, []);
 
   const handleSubmit = async () => {
-    if (formType === "add") {
-      await API.addEmployee(formData as Employee);
-    } else {
-      await API.updateEmployee(formData as Employee);
-    }
-    setVisible(false);
-    fetchData();
+    form.validateFields()
+      .then(values => {
+        if (formType === "add") {
+          API.addEmployee({ ...values, joinedDate: date, id: uuid() });
+        } else {
+          API.updateEmployee({ ...formData, ...values, joinedDate: date });
+        }
+        form.resetFields();
+        setVisible(false);
+        setShowMessage("success");
+        alert(showMessage)
+        fetchData()
+      })
+      .catch(info => {
+        setShowMessage("error");
+        console.log('Validate Failed:', info);
+      });
   };
 
   const handleDelete = async (id: string) => {
     await API.deleteEmployee(id);
+    setShowMessage("warning");
     fetchData();
   };
+
+  const handleEdit = (item:Employee) => {
+    form.resetFields();
+    setFormData(item);
+    setFormType("edit");
+    setVisible(true);
+  }
+
+  const formClear = () => {
+    setFormData({});
+  }
+  const handleAdd = () => {
+    formClear();
+    form.resetFields();
+    setVisible(true)
+    setFormType("add")
+  }
+
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+    },
+  };
+
   const renderForm = () => (
     <Modal
       title={formType === "add" ? "Add Employee" : "Edit Employee"}
       open={visible}
       onOk={handleSubmit}
       onCancel={() => setVisible(false)}
+      footer={null
+      }
     >
-      <Form>
-        <Form.Item label="First Name">
-          <Input
-            value={formData.firstName || ""}
-            onChange={e =>
-              setFormData({ ...formData, firstName: e.target.value ,id: uuid() })
+      <Form
+        form={form}
+        {...formItemLayout}
+        onFinish={handleSubmit}
+        initialValues={{
+          id: formData.id,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          gender: formData.gender,
+        }}
+      >
+        <Item
+          name="firstName"
+          label="First Name"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your first name!',
+            },
+            {
+              min: 6,
+              max: 10,
+              message: 'First name should be between 6 and 10 characters'
             }
-          />
-        </Form.Item>
-        <Form.Item label="Last Name">
-          <Input
-            value={formData.lastName || ""}
-            onChange={e =>
-              setFormData({ ...formData, lastName: e.target.value })
+          ]}
+        >
+          <Input placeholder="First Name" />
+        </Item>
+        <Item
+          name="lastName"
+          label="Last Name"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your last name!',
+            },
+            {
+              min: 6,
+              max: 10,
+              message: 'Last name should be between 6 and 10 characters'
             }
-          />
-        </Form.Item>
-        <Form.Item label="Email">
-          <Input
-            value={formData.email || ""}
-            onChange={e => setFormData({ ...formData, email: e.target.value })}
-          />
-        </Form.Item>
-        <Form.Item label="Phone">
-          <Input
-            value={formData.phone || ""}
-            onChange={e => setFormData({ ...formData, phone: e.target.value })}
-          />
-        </Form.Item>
-        <Form.Item label="Gender">
-          <Radio.Group
-            value={formData.gender || "Male"}
-            onChange={e =>
-              setFormData({ ...formData, gender: e.target.value })
+          ]}
+        >
+          <Input placeholder="Last Name" />
+        </Item>
+        <Item
+          name="email"
+          label="Email Address"
+          rules={[
+            {
+              type: 'email',
+              message: 'The input is not a valid email address!',
+            },
+            {
+              required: true,
+              message: 'Please input your email address!'
             }
-          >
+          ]}
+        >
+          <Input placeholder="Email Address" />
+        </Item>
+        <Item
+          name="phone"
+          label="Phone Number"
+          rules={[
+            {
+              required: true,
+              message: 'Please input your phone number!'
+            },
+            {
+              pattern: new RegExp(
+                "^[6|8|9][0-9]{7}$"
+              ),
+              message: "Phone number is invalid"
+            }
+          ]}
+        >
+          <Input placeholder="Phone Number" />
+        </Item>
+        <Item name="gender" label="Gender" rules={[{ required: true, message: 'Please select your gender!' }]}>
+          <Radio.Group>
             <Radio value="Male">Male</Radio>
             <Radio value="Female">Female</Radio>
           </Radio.Group>
-        </Form.Item>
-        <Form.Item label="Joined Date">
+        </Item>
+        <Item name="joinedDate" label="Joined Date">
           <DatePicker
-            onChange={(date, dateString) =>
-              setFormData({ ...formData, joinedDate: dateString })
-            }
-            disabledDate={current => current && current > moment().endOf("day")}
+            onChange={handleDateChange}
+            value={date}
+            disabledDate={(currentDate) => currentDate && currentDate > moment()}
           />
-        </Form.Item>
+        </Item>
+        <Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Item>
       </Form>
     </Modal>
   );
@@ -111,11 +213,7 @@ const EmployeeList: React.FC = () => {
         style={{
           right: 94,
         }}
-        onClick={() =>{
-          setFormData({});
-          setVisible(true)
-          setFormType("add")}
-        }
+        onClick={handleAdd}
       />
       <List
         className="employee-list"
@@ -124,12 +222,7 @@ const EmployeeList: React.FC = () => {
         renderItem={(item) => (
           <List.Item key={item.id} actions={[
             <Button type="text"
-              onClick={() => {
-                setFormData(item);
-                setFormType("edit");
-                setVisible(true);
-              }
-              }
+              onClick={()=>handleEdit(item)}
             >edit</Button>,
             <Button
               onClick={() => {
@@ -144,7 +237,7 @@ const EmployeeList: React.FC = () => {
                   <span className="gender">{item.gender}</span>
                   <span className="email">{item.email}</span>
                   <span className="phone">{item.phone}</span>
-                  <span className="joined-date">{item.joinedDate}</span>
+                  <span className="joined-date">{moment(item.joinedDate).format('YYYY/MM/DD')}</span>
                 </span>
               }
             />
@@ -152,6 +245,27 @@ const EmployeeList: React.FC = () => {
         )}
       />
       {renderForm()}
+      {showMessage == "success" && (
+        <AlertMessage
+          type="success"
+          content="Added employee successfully"
+          onClose={()=>{setShowMessage(null)}}
+        />
+      )}
+      {showMessage == "error" && (
+        <AlertMessage
+          type="error"
+          content="An issue occured while submitting your request"
+          onClose={()=>{setShowMessage(null)}}
+        />
+      )}
+      {showMessage == "warning" && (
+        <AlertMessage
+          type="warning"
+          content="Deleted the employee"
+          onClose={()=>{setShowMessage(null)}}
+        />
+      )}
     </>
   )
 
