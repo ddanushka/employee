@@ -1,8 +1,8 @@
 import moment from "moment";
 import React, { useState, useEffect } from "react";
 import { Bar } from "react-chartjs-2";
-import API from "../API";
-import { Employee } from "../employee";
+import API from "../services/employees";
+import { Employee } from "../interfaces/employee";
 import {
   Chart as ChartJS,
   CategoryScale,

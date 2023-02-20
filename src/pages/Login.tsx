@@ -2,19 +2,22 @@ import React, { useState, useContext } from "react";
 import { Form, Input, Button, Layout, Typography, Space } from 'antd';
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { AuthContext } from "../context/AuthContext";
+import UserLogin from "../services/login";
+import { User } from "../interfaces/user";
 const { Content } = Layout;
 const { Title } = Typography;
 
 const Login: React.FC = () => {
   const { login } = useContext(AuthContext);
-  const [formData, setFormData] = useState({
-    username: "",
-    password: ""
+  const [formData, setFormData] = useState<User>({
+    password: '',
+    username: ''
   });
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    login(formData);
+    UserLogin.loginUser(formData)
+    login();
   };
 
   const handleChange = (e: any) => {

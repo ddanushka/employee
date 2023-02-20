@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { Employee } from "../employee";
-import API from "../API";
+import React, { useState, useEffect, useContext } from "react";
+import { Employee } from "../interfaces/employee";
+import Employees from "../services/employees";
 import { Input, Modal, Form, Radio, FloatButton, List, Button, message, Popconfirm } from "antd";
 import DatePicker from "./DatePicker";
 import { PlusOutlined } from '@ant-design/icons';
 import moment from "moment";
 import uuid from "react-uuid";
+import { AuthContext } from "../context/AuthContext";
 
 const { Item } = Form;
 const { TextArea } = Input;
 
 const EmployeeList: React.FC = () => {
-
+  const { role } = useContext(AuthContext);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [visible, setVisible] = useState(false);
   const [formData, setFormData] = useState<Partial<Employee>>({});
@@ -25,7 +26,7 @@ const EmployeeList: React.FC = () => {
   }
 
   const fetchData = async () => {
-    const employees = await API.getEmployees();
+    const employees = await Employees.getEmployees();
     setEmployees(employees);
   };
   useEffect(() => {
@@ -36,9 +37,9 @@ const EmployeeList: React.FC = () => {
     form.validateFields()
       .then(values => {
         if (formType === "add") {
-          API.addEmployee({ ...values, joinedDate: date, id: uuid() });
+          Employees.addEmployee({ ...values, joinedDate: date, id: uuid() });
         } else {
-          API.updateEmployee({ ...formData, ...values, joinedDate: date });
+          Employees.updateEmployee({ ...formData, ...values, joinedDate: date });
         }
         form.resetFields();
         setVisible(false);
@@ -51,7 +52,7 @@ const EmployeeList: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    await API.deleteEmployee(id);
+    await Employees.deleteEmployee(id);
     message.warning("Deleted the employee");
     fetchData();
   };
@@ -198,33 +199,35 @@ const EmployeeList: React.FC = () => {
 
   return (
     <>
-      <FloatButton
-        icon={<PlusOutlined />}
-        type="primary"
-        style={{
-          right: 94,
-        }}
-        onClick={handleAdd}
-      />
+      {role === "admin" &&
+        <FloatButton
+          icon={<PlusOutlined />}
+          type="primary"
+          style={{
+            right: 94,
+          }}
+          onClick={handleAdd}
+        />
+      }
       <List
         className="employee-list"
         itemLayout="horizontal"
         dataSource={employees}
         renderItem={(item) => (
-          <List.Item key={item.id} actions={[
+          <List.Item key={item.id} actions={ role === "admin" ? [
             <Button type="text"
               onClick={() => handleEdit(item)}
             >edit</Button>,
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this task?"
-              onConfirm={()=>handleDelete(item.id)}
+              onConfirm={() => handleDelete(item.id)}
               okText="Yes"
               cancelText="No"
             >
               <Button type="text">delete</Button>
             </Popconfirm>
-          ]}>
+          ]: []}>
             <List.Item.Meta
               title={<div>{item.firstName + " " + item.lastName}</div>}
               description={
