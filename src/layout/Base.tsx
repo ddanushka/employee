@@ -9,7 +9,7 @@ const BaseLayout: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   return (
-    <Layout>
+    <Layout className='main-layout'>
       <SideMenu />
       <Layout>
         <Header
@@ -21,6 +21,7 @@ const BaseLayout: React.FC = () => {
         <Content
           style={{
             margin: '24px 16px 0',
+            overflow: 'auto'
           }}
         >
           <div
@@ -30,7 +31,7 @@ const BaseLayout: React.FC = () => {
               background: colorBgContainer,
             }}
           >
-            <Outlet/>
+            <Outlet />
           </div>
         </Content>
         <Footer
@@ -38,7 +39,6 @@ const BaseLayout: React.FC = () => {
             textAlign: 'center',
           }}
         >
-          Ant Design ©2023 Created by Ant UED
         </Footer>
       </Layout>
     </Layout>

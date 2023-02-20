@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Employee } from "../employee";
 import API from "../API";
-import { Input, Modal, Form, Radio, FloatButton, List, Button } from "antd";
+import { Input, Modal, Form, Radio, FloatButton, List, Button, message, Popconfirm } from "antd";
 import DatePicker from "./DatePicker";
-import AlertMessage from "./AlertMessage";
 import { PlusOutlined } from '@ant-design/icons';
 import moment from "moment";
 import uuid from "react-uuid";
@@ -18,14 +17,8 @@ const EmployeeList: React.FC = () => {
   const [formData, setFormData] = useState<Partial<Employee>>({});
   const [formType, setFormType] = useState<"add" | "edit">("add");
   const [form] = Form.useForm();
-  const [showMessage, setShowMessage] = useState<String | null>();
 
   const [date, setDate] = useState<moment.Moment | null>(moment(new Date()))
-  // const handleDateChange = (dateObject: moment.Moment | null, dateString: string): void => {
-  //   console.info('date string:', dateString)
-  //   console.info('date obj:', dateObject)
-  //   setDate(dateObject)
-  // }
   const handleDateChange = (dateObject: moment.Moment | null, dateString: string): void => {
     setDate(dateObject)
     setFormData({ ...formData, joinedDate: dateString });
@@ -49,23 +42,21 @@ const EmployeeList: React.FC = () => {
         }
         form.resetFields();
         setVisible(false);
-        setShowMessage("success");
-        alert(showMessage)
+        message.success("Added employee successfully")
         fetchData()
       })
       .catch(info => {
-        setShowMessage("error");
-        console.log('Validate Failed:', info);
+        message.error("An issue occured while submitting your request")
       });
   };
 
   const handleDelete = async (id: string) => {
     await API.deleteEmployee(id);
-    setShowMessage("warning");
+    message.warning("Deleted the employee");
     fetchData();
   };
 
-  const handleEdit = (item:Employee) => {
+  const handleEdit = (item: Employee) => {
     form.resetFields();
     setFormData(item);
     setFormType("edit");
@@ -222,13 +213,17 @@ const EmployeeList: React.FC = () => {
         renderItem={(item) => (
           <List.Item key={item.id} actions={[
             <Button type="text"
-              onClick={()=>handleEdit(item)}
+              onClick={() => handleEdit(item)}
             >edit</Button>,
-            <Button
-              onClick={() => {
-                handleDelete(item.id)
-              }}
-              type="text">delete</Button>
+            <Popconfirm
+              title="Delete the task"
+              description="Are you sure to delete this task?"
+              onConfirm={()=>handleDelete(item.id)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="text">delete</Button>
+            </Popconfirm>
           ]}>
             <List.Item.Meta
               title={<div>{item.firstName + " " + item.lastName}</div>}
@@ -245,27 +240,6 @@ const EmployeeList: React.FC = () => {
         )}
       />
       {renderForm()}
-      {showMessage == "success" && (
-        <AlertMessage
-          type="success"
-          content="Added employee successfully"
-          onClose={()=>{setShowMessage(null)}}
-        />
-      )}
-      {showMessage == "error" && (
-        <AlertMessage
-          type="error"
-          content="An issue occured while submitting your request"
-          onClose={()=>{setShowMessage(null)}}
-        />
-      )}
-      {showMessage == "warning" && (
-        <AlertMessage
-          type="warning"
-          content="Deleted the employee"
-          onClose={()=>{setShowMessage(null)}}
-        />
-      )}
     </>
   )
 

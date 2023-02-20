@@ -1,12 +1,11 @@
 import React from 'react';
 import { LogoutOutlined, UserOutlined, BarChartOutlined } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 const { Sider } = Layout;
 const SideMenu: React.FC = () => {
-  const navigate = useNavigate()
   const {
     token: { colorBgContainer },
   } = theme.useToken();

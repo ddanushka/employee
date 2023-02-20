@@ -1,3 +1,16 @@
+.main-layout,
+.login-page {
+  height: 100vh;
+}
+
+.login-page__content {
+  justify-content: center;
+}
+
 .employee-list {
   text-align: left;
+  .employee-data {
+    display: flex;
+    flex-direction: column;
+  }
 }
