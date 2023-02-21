@@ -35,10 +35,11 @@ const EmployeeList: React.FC = () => {
   const handleSubmit = async () => {
     form.validateFields()
       .then(values => {
+        const jdate = moment(values.joinedDate).format("YYYY MM DD")
         if (formType === "add") {
-          Employees.addEmployee({ ...values, joinedDate: date, id: uuid() });
+          Employees.addEmployee({ ...values, joinedDate: jdate, id: uuid() });
         } else {
-          Employees.updateEmployee({ ...formData, ...values, joinedDate: date });
+          Employees.updateEmployee({ ...values, joinedDate: jdate });
         }
         form.resetFields();
         setVisible(false);
@@ -58,9 +59,17 @@ const EmployeeList: React.FC = () => {
 
   const handleEdit = (item: Employee) => {
     form.resetFields();
-    setFormData(item);
+    // setFormData(item);
     setFormType("edit");
     setVisible(true);
+    form.setFieldsValue({
+      id: item.id,
+      firstName: item.firstName,
+      lastName: item.lastName,
+      email: item.email,
+      phone: item.phone,
+      gender: item.gender,
+    });
   }
 
   const formClear = () => {
@@ -97,15 +106,11 @@ const EmployeeList: React.FC = () => {
         form={form}
         {...formItemLayout}
         onFinish={handleSubmit}
-        initialValues={{
-          id: formData.id,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          gender: formData.gender,
-        }}
+
       >
+        <Item hidden={true} name="id">
+          <Input />
+        </Item>
         <Item
           name="firstName"
           label="First Name"
@@ -213,7 +218,7 @@ const EmployeeList: React.FC = () => {
         itemLayout="horizontal"
         dataSource={employees}
         renderItem={(item) => (
-          <List.Item key={item.id} actions={ role === "admin" ? [
+          <List.Item key={item.id} actions={role === "admin" ? [
             <Button type="text"
               onClick={() => handleEdit(item)}
             >edit</Button>,
@@ -226,7 +231,7 @@ const EmployeeList: React.FC = () => {
             >
               <Button type="text">delete</Button>
             </Popconfirm>
-          ]: []}>
+          ] : []}>
             <List.Item.Meta
               title={<div>{item.firstName + " " + item.lastName}</div>}
               description={
