@@ -234,7 +234,7 @@ const EmployeeList: React.FC = () => {
                   <span className="gender">{item.gender}</span>
                   <span className="email">{item.email}</span>
                   <span className="phone">{item.phone}</span>
-                  <span className="joined-date">{moment(item.joinedDate).format('YYYY/MM/DD')}</span>
+                  <span className="joined-date">{moment(item.joinedDate).format("MMMM Do YYYY")}</span>
                 </span>
               }
             />
