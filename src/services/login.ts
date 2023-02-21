@@ -10,11 +10,11 @@ const UserLogin = {
         const users = UserLogin.getUser();
 
         // Here you would normally make an API call to validate the user credentials and get the role information.
-        if (user.username.toLowerCase() == 'user' && user.password.toLowerCase() == 'user') {
+        if (user.username.toLowerCase() === 'user' && user.password.toLowerCase() === 'user') {
             users.isAuth = true;
             users.role = "standard";
         }
-        if (user.username.toLowerCase() == 'admin' && user.password.toLowerCase() == 'admin') {
+        if (user.username.toLowerCase() === 'admin' && user.password.toLowerCase() === 'admin') {
             users.isAuth = true;
             users.role = "admin";
         }
@@ -30,7 +30,6 @@ const UserLogin = {
     },
 
     logoutUser: () => {
-        const user = UserLogin.getUser();
         localStorage.setItem("loggedUser", JSON.stringify({}));
     },
 

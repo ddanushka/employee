@@ -1,18 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { LogoutOutlined, UserOutlined, BarChartOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
+import { Layout, Menu } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
 import UserLogin from '../services/login';
 
 const { Sider } = Layout;
 
 const SideMenu: React.FC = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, role } = useContext(AuthContext)
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
 
   const logout = () => {
     UserLogin.logoutUser()

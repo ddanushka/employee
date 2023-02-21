@@ -9,7 +9,6 @@ import uuid from "react-uuid";
 import { AuthContext } from "../context/AuthContext";
 
 const { Item } = Form;
-const { TextArea } = Input;
 
 const EmployeeList: React.FC = () => {
   const { role } = useContext(AuthContext);
