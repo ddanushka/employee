@@ -28,7 +28,6 @@ const EmployeeList: React.FC = () => {
   const handleSubmit = async () => {
     form.validateFields()
       .then(values => {
-        debugger
         const jdate = moment(values.joinedDate).format("YYYY MM DD")
         if (formType === "add") {
           Employees.addEmployee({ ...values, joinedDate: jdate, id: uuid() });

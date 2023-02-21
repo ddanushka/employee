@@ -9,6 +9,13 @@
 
 .login-page__content {
   justify-content: center;
+  height: 100vh;
+  h1 {
+    text-transform: uppercase;
+    font-size: 2rem;
+    text-align: center;
+    color: #444;
+  }
 }
 
 .employee-list {

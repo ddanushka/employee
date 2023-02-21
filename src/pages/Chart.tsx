@@ -42,7 +42,7 @@ const Chart: React.FC = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: 'bottom' as const,
       },
       title: {
         display: true,
@@ -51,8 +51,16 @@ const Chart: React.FC = () => {
     },
   };
 
+  const pastYears = (back: number) => {
+    const year = new Date().getFullYear();
+    return Array.from({length: back}, (v, i) => year - back + i + 1);
+  }
+
   const createChartData = (employees: Employee[]) => {
     const years: { [key: string]: number } = {};
+    pastYears(10).forEach((y)=>{
+      years[y] = 0;
+    })
     employees.forEach((employee: Employee) => {
       const year = moment(employee.joinedDate).year();
       if (!years[year]) {
