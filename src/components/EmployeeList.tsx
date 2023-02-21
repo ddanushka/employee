@@ -14,15 +14,8 @@ const EmployeeList: React.FC = () => {
   const { role } = useContext(AuthContext);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [visible, setVisible] = useState(false);
-  const [formData, setFormData] = useState<Partial<Employee>>({});
   const [formType, setFormType] = useState<"add" | "edit">("add");
   const [form] = Form.useForm();
-
-  const [date, setDate] = useState<moment.Moment | null>(moment(new Date()))
-  const handleDateChange = (dateObject: moment.Moment | null, dateString: string): void => {
-    setDate(dateObject)
-    setFormData({ ...formData, joinedDate: dateString });
-  }
 
   const fetchData = async () => {
     const employees = await Employees.getEmployees();
@@ -35,6 +28,7 @@ const EmployeeList: React.FC = () => {
   const handleSubmit = async () => {
     form.validateFields()
       .then(values => {
+        debugger
         const jdate = moment(values.joinedDate).format("YYYY MM DD")
         if (formType === "add") {
           Employees.addEmployee({ ...values, joinedDate: jdate, id: uuid() });
@@ -59,9 +53,10 @@ const EmployeeList: React.FC = () => {
 
   const handleEdit = (item: Employee) => {
     form.resetFields();
-    // setFormData(item);
     setFormType("edit");
     setVisible(true);
+    const jdate = moment(item.joinedDate)
+
     form.setFieldsValue({
       id: item.id,
       firstName: item.firstName,
@@ -69,14 +64,11 @@ const EmployeeList: React.FC = () => {
       email: item.email,
       phone: item.phone,
       gender: item.gender,
+      joinedDate: jdate
     });
   }
 
-  const formClear = () => {
-    setFormData({});
-  }
   const handleAdd = () => {
-    formClear();
     form.resetFields();
     setVisible(true)
     setFormType("add")
@@ -187,8 +179,6 @@ const EmployeeList: React.FC = () => {
         </Item>
         <Item name="joinedDate" label="Joined Date">
           <DatePicker
-            onChange={handleDateChange}
-            value={date}
             disabledDate={(currentDate) => currentDate && currentDate > moment()}
           />
         </Item>
