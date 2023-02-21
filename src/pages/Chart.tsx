@@ -12,7 +12,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-// import { dat } from "react-chartjs-2/dist/types";
 
 ChartJS.register(
   CategoryScale,
@@ -24,31 +23,16 @@ ChartJS.register(
 );
 
 const Chart: React.FC = () => {
-  const [employees, setEmployees] = useState<Employee[]>([]);
-  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
   const [chartData, setChartData] = useState<any>({
-    labels: labels,
-    datasets: [{
-      label: 'Expenses by Month',
-      data: [65, 59, 80, 81, 56, 55, 40],
-      backgroundColor: [
-        'rgb(153, 102, 255)'
-      ],
-      borderColor: [
-        'rgb(153, 102, 255)'
-      ],
-      borderWidth: 1
-    }]
+    labels: [],
+    datasets: [{}]
   });
 
   useEffect(() => {
     const fetchData = async () => {
       const getEmployees = await API.getEmployees();
-      setEmployees(getEmployees);
-
-      // const chartData = createChartData(getEmployees);
       createChartData(getEmployees);
-      // setChartData(chartData);
     };
 
     fetchData();
