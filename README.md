@@ -49,10 +49,10 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 This app has two users Admin and Standard, below are the user details.
 
-- Admin user creadentials
-username: admin
-password: admin
+- Admin user creadentials 
+--username: admin, 
+--password: admin
 
-- Standard user creadentials
-username: user
-password: user
+- Standard user creadentials 
+--username: user, 
+--password: user
