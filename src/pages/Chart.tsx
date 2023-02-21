@@ -26,7 +26,7 @@ const Chart: React.FC = () => {
 
   const [chartData, setChartData] = useState<any>({
     labels: [],
-    datasets: [{}]
+    datasets: []
   });
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const Chart: React.FC = () => {
       },
       title: {
         display: true,
-        text: 'Chart.js Bar Chart',
+        text: 'Emplyee growth over the years',
       },
     },
   };
