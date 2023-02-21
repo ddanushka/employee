@@ -79,8 +79,8 @@ const Chart: React.FC = () => {
         {
           label: "Number of Employees",
           data,
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          borderColor: "rgba(255, 99, 132, 1)",
+          backgroundColor: "#bfebc5",
+          borderColor: "#00ad18",
           borderWidth: 1
         }
       ]
@@ -90,7 +90,7 @@ const Chart: React.FC = () => {
   return (
     <div>
       <h2>Employee Join Year Chart</h2>
-      <Bar data={chartData} options={options} />
+      <Bar data={chartData} options={options} height={90} />
     </div>
   );
 };
