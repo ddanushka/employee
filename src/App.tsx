@@ -1,4 +1,4 @@
-import './styles.scss';
+import './assets/styles/common.scss';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';

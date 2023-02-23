@@ -194,11 +194,9 @@ const EmployeeList: React.FC = () => {
     <>
       {role === "admin" &&
         <FloatButton
+          className="add-button"
           icon={<PlusOutlined />}
           type="primary"
-          style={{
-            right: 94,
-          }}
           onClick={handleAdd}
         />
       }
