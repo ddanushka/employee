@@ -1,0 +1,34 @@
+// Primary palette
+$clr_white: #fff;
+$clr_black_opacity: rgba(0, 0, 0, 0.25);
+$clr_white_opacity: rgba(255, 255, 255, 0.16);
+$clr_grey_dark: #444;
+$clr_grey: #ccc;
+$clr_grey_light: #eee;
+$clr_off_white: #bbb ;
+
+// Content wrapper
+$width_content: 1280px;
+
+// Media queries
+$small_screen: 750px;
+$small_screen_up: 751px;
+$medium_screen: 970px;
+$medium_screen_up: 971px;
+$large_screen: 1180px;
+$large_screen_up: 1181px;
+$xlarge_screen: 1479px;
+$xlarge_screen_up: 1480px;
+$small_and_down: "(max-width: #{$small_screen})";
+$small_and_up: "(min-width: #{$small_screen_up})";
+$small_to_medium: "(min-width: #{$small_screen_up}) and (max-width: #{$medium_screen})";
+$small_to_large: "(min-width: #{$small_screen_up}) and (max-width: #{$large_screen})";
+$medium_and_down: "(max-width: #{$medium_screen})";
+$medium_and_up: "(min-width: #{$medium_screen_up})";
+$medium_to_large: "(min-width: #{$medium_screen_up}) and (max-width: #{$large_screen})";
+$medium_to_xlarge: "(min-width: #{$medium_screen_up}) and (max-width: #{$xlarge_screen})";
+$large_and_down: "(max-width: #{$large_screen})";
+$large_and_up: "(min-width: #{$large_screen_up})";
+$large_to_xlarge: "(min-width: #{$large_screen_up}) and (max-width: #{$xlarge_screen})";
+$xlarge_and_down: "(max-width: #{$xlarge_screen})";
+$xlarge_and_up: "(min-width: #{$xlarge_screen_up})";

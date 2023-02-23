@@ -12,15 +12,8 @@ const BaseLayout: React.FC = () => {
     <Layout className='main-layout'>
       <SideMenu />
       <Layout>
-        <Header
-          style={{
-            padding: 0,
-            background: colorBgContainer,
-          }}
-        />
         <Content
           style={{
-            margin: '24px 16px 0',
             overflow: 'auto'
           }}
         >
@@ -34,12 +27,6 @@ const BaseLayout: React.FC = () => {
             <Outlet />
           </div>
         </Content>
-        <Footer
-          style={{
-            textAlign: 'center',
-          }}
-        >
-        </Footer>
       </Layout>
     </Layout>
   );
